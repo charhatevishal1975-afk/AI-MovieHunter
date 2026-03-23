@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Movie Hunter + Optimizer</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- why this link? It's for Bootstrap CSS to style the page with pre-built responsive components -->
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!--why this link? It's for GSAP animation library to create smooth animations on the page  -->
+</head>
+<body>
+
+    <canvas id="galaxy-canvas"></canvas>
+
+    <nav class="navbar navbar-dark bg-transparent fixed-top px-4 py-3">
+        <span class="navbar-brand fw-bold fs-3 text-white">
+            🎬 Dev.Com MovieTool
+        </span>
+        
+        <button class="btn btn-outline-warning rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#watchlistModal">
+            📝 Weekend Watchlist 
+            <span class="badge bg-warning text-dark ms-2" id="watchlistCount">0</span>
+        </button>
+    </nav>
+
+    <main class="container position-relative" style="z-index: 10; margin-top: 100px;">
+        
+        <div class="text-center mb-5">
+            <h1 class="display-3 fw-bold mb-3 text-gradient">AI Movie Hunter</h1>
+            <p class="lead text-secondary">
+                Search by Title, Actor, or <span class="text-info fw-bold">Mood</span>.
+            </p>
+        </div>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 col-lg-6">
+                <div class="input-group input-group-lg search-container">
+                    <input type="text" id="searchInput" class="form-control rounded-pill start-rounded ps-4 text-white" 
+                           autofocus placeholder="Type 'I feel happy' or 'Batman'...">
+                    <button class="btn btn-primary rounded-pill end-rounded px-4" id="searchBtn">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mb-4">
+            <div id="badgeSpinner" class="netflix-badge d-none">
+                <div class="spinner-border text-light me-2" role="status"></div>
+                AI is Thinking...
+            </div>
+        </div>
+
+        <h3 id="resultsTitle" class="mb-4 d-none">Top Recommendations:</h3>
+        <div id="movieContainer">
+            </div>
+    </main>
+
+    <div class="modal fade" id="movieModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-secondary">
+                
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title" id="modalTitle">Movie Title</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="modalPoster" src="" class="img-fluid rounded shadow-lg border-rainbow" alt="Movie Poster">
+                            <button class="btn btn-success w-100 mt-3 fw-bold" id="addToWatchlistBtn">
+                                + Add to Watchlist
+                            </button>
+                        </div>
+
+                        <div class="col-md-8 mt-3 mt-md-0">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="badge bg-warning text-dark me-2 fs-6" id="modalRating"></span>
+                                <span class="badge bg-secondary me-2" id="modalYear"></span>
+                                <span class="badge bg-info text-dark" id="modalRuntime"></span>
+                            </div>
+
+                            <p class="text-info mb-2" id="modalGenre"></p>
+                            <p id="modalPlot" class="lead fs-6"></p>
+                            <hr class="border-secondary">
+                            <p><strong>Cast:</strong> <span id="modalCast" class="text-secondary"></span></p>
+                            
+                            <h5 class="mt-4 text-uppercase text-secondary small">Similar Movies</h5>
+                            <div class="row g-3" id="similarMoviesContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="watchlistModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-warning">
+                
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">🏆 Weekend Watchlist Optimizer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-4 p-3 bg-black rounded border border-secondary">
+                        <label class="form-label text-warning">How many hours do you have this weekend?</label>
+                        <div class="d-flex gap-2">
+                            <input type="number" id="userHoursInput" class="form-control bg-dark text-white border-secondary" placeholder="e.g. 5">
+                            <button class="btn btn-warning fw-bold" id="optimizeBtn">Optimize</button>
+                        </div>
+                    </div>
+
+                    <h6 class="text-secondary">Your Current List:</h6>
+                    <ul class="list-group list-group-flush mb-3" id="watchlistItems">
+                        </ul>
+
+                    <div id="optimizerResult" class="alert alert-info d-none"></div>
+                </div>
+
+                <div class="modal-footer border-secondary">
+                    <button class="btn btn-outline-danger btn-sm" id="clearWatchlistBtn">Clear List</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="script.js"></script>
+
+</body>
+</html>
