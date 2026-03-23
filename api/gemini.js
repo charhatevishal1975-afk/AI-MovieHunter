@@ -11,19 +11,27 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
+          contents: [
+            {
+              parts: [{ text: prompt }]
+            }
+          ]
         }),
       }
     );
 
     const data = await response.json();
 
+    if (!response.ok) {
+      return res.status(500).json({ error: data });
+    }
+
     const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+      data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
 
     res.status(200).json({ result: text });
 
   } catch (err) {
-    res.status(500).json({ error: "Gemini failed" });
+    res.status(500).json({ error: "Server error" });
   }
 }
